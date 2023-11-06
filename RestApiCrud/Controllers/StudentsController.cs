@@ -78,7 +78,37 @@ namespace RestApiCrud.Controllers
             students.Add(new Student { StudentId = 2, StudentName = "bb", Email = "bb@bb.com" });
             students.Add(new Student { StudentId = 3, StudentName = "cc", Email = "cc@cc.com" });
 
-            students.Add(student);
+            var existingStudent = students.FirstOrDefault(s => s.StudentId == student.StudentId);
+            if (existingStudent == null)
+            {
+                return NotFound(); // Student not found in the list
+            }
+
+            existingStudent.StudentName = student.StudentName;
+            existingStudent.Email = student.Email;
+
+            return Ok(students);
+        }
+
+        [HttpDelete]
+        [Route("delete-student/{StudentId}")]
+        public IActionResult DeleteStudent(int StudentId)
+        {
+            List<Student> students = new List<Student>();
+
+            //--get student list from database
+            students.Add(new Student { StudentId = 1, StudentName = "aa", Email = "aa@aa.com" });
+            students.Add(new Student { StudentId = 2, StudentName = "bb", Email = "bb@bb.com" });
+            students.Add(new Student { StudentId = 3, StudentName = "cc", Email = "cc@cc.com" });
+
+
+            var student = students.FirstOrDefault(s => s.StudentId == StudentId);
+            if (student == null)
+            {
+                return NotFound(); // Student not found in the list
+            }
+
+            students.Remove(student);
 
             return Ok(students);
         }
